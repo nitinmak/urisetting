@@ -1,6 +1,6 @@
 // Initialize app
 var myApp = new Framework7();
-
+var url = 'https://digitalbcards.in/api/'
 
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
@@ -17,92 +17,47 @@ $$(document).on('deviceready', function() {
                 // window.localStorage.setItem("login",0);
 
     var islogin = window.localStorage.getItem("login");
-myApp.alert(islogin); 
 
 if(islogin == 1){
     $$('#home').trigger("click");
  //window.location.href = "home.html"
   }
+   $$(document).on('click', '#submitdata', function(){  
+         form =$('#login_form').serialize();
+           $('#myOverlay').show();
+    $('#loadingGIF').show();
+      $.ajax({  
+                url:url+"login/",  
+                method:"POST",  
+                data:form,  
+                dataType:"json",  
+                success:function(data)  
+                {  
+                 if(data.status == 0){
+                    myApp.alert(data.message);
+                      $('#myOverlay').hide();
+    $('#loadingGIF').hide();
+                 }else{
+                   // alert(data);
+                    // myApp.alert(data.all_data);
+                    myApp.alert(data.message);
+                    // window.location.href = "about.html";
+                   // insertData();
+                    // alert(data.user_id);
+                    // insertallData(data.all_data);
+                     $$('#home').trigger("click");
 
-   $('#login_form').validate({ // initialize the plugin
-        errorLabelContainer: "#cs-error-note",
-   
-     errorClass: 'errors',
-    rules: {
-     
-       
-        email: {
-           
-            required: true,
-            email:true,
-            
-        },
-         password: {
-           
-            required: true,
-            
-        },
-        
-    },
-    messages: {
-       
-        
-         email: {
-           
-            required: "Please enter  Email.",
-            email:"Please Enter Proper Email",
-            
-        },
-         password: {
-           
-            required: "Please enter  Password.",
-            
-            
-        },
-        
-       
-         
-    },
-        submitHandler: function (form) { // for demo
-          form =$('#login_form').serialize();
-          var  action = $('#action').val();
-          var  email = $('#email').val();
-        
-     $.ajax({
-            url: "https://digitalbcards.in/api/login/", 
-            method: "POST",
-            data:form, 
-            dataType:"json",            
-           
-            success: function(data) {
-              if(data.status == 0){
-        //            $('#icon').html('<i class="fa fa-exclamation font-30 icon-circle icon-l bg-white color-black shadow-icon-large"></i>');
-        // $('#error_msg_title').html('Login Failed');            
-        myApp.alert(data.message);            
-// $('#attention').addClass('active-menu-box-modal');
 
-    
-                // alert(data.message);
-              }else{
+                    
+                      $('#myOverlay').hide();
+    $('#loadingGIF').hide();
+                    // location.reload();
+                    // $$('#home').trigger("click");
 
-                window.localStorage.setItem("login",1);
-                window.localStorage.setItem("email",email);
 
-               // alert(data.message);
-                
-              // $('#home').click();
-              // $('#icon').html('<i class="fa fa-check font-30 icon-circle icon-l color-green-dark bg-white shadow-icon-large"></i>');
-              // $('#error_msg_title').html('Login Succes');            
-        myApp.alert(data.message);            
-     $$('#home').trigger("click");    
-// $('#attention').addClass('active-menu-box-modal');
- // window.location.href = "home.html"
-              }
-            //location.reload();
-          }
-        })
-            return false; // for demo
-        }
+                 }  
+                }  
+           })  
     });
 
 
